@@ -1,0 +1,30 @@
+create table suppliers9(
+    supId integer,
+    sname varchar(20),
+    contName varchar(20),
+    address varchar(20),
+    city varchar(20),
+    country varchar(20),
+    primary key(supId));
+create table products9(
+    pid integer,
+    pname varchar(20),
+    supId integer,
+    categoryId integer,
+    price integer,
+    primary key(pid),
+    foreign key(supId)references suppliers9(supId));
+insert into suppliers9 values(501,'sher','abc','cg1','bvrm','pakistan');
+insert into suppliers9 values(502,'devi','cdt','12a','kkp','INDIA');
+insert into suppliers9 values(503,'priya','yut','ty3','kurnool','INDIA');
+select *from suppliers9;
+insert into products9 values(1,'santoor',501,21,200);
+insert into products9 values(2,'sandal',502,22,500);
+insert into products9 values(3,'mysore',503,23,600);
+select *from products9;
+select *from suppliers9 where contName = ANY(select contName suppliers9 where country="INDIA");
+select sname from suppliers9 where sname IN(select sname from products9 where products9.supId=suppliers9.supId);
+select sname from suppliers9 where sname NOT IN(select sname from products9 where products9.supId=suppliers9.supId);
+select sname from suppliers9 where EXISTS(select * from products9 where products9.supId=suppliers9.supId);
+select sname from suppliers9 where NOT EXISTS(select * from products9 where products9.supId=suppliers9.supId);
+
