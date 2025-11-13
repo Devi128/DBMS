@@ -1,37 +1,34 @@
-import matplotlib.pyplot as plt
-import numpy as np
+const express = require('express');
+const app = express();
+const port = 3000;
 
-data = np.array([
-    [160, 55],
-    [170, 65],
-    [165, 60],
-    [180, 75]
-])
+app.use(express.json());
 
-heights = data[:, 0]
-weights = data[:, 1]
-names = ['A', 'B', 'C', 'D']
+app.get('/', (req, res) => {
+  res.send('Welcome to the Express.js example!');
+});
 
-plt.figure(figsize=(6,4))
-plt.hist(heights, bins=4, color='skyblue', edgecolor='black')
-plt.title("Histogram of Heights")
-plt.xlabel("Height (cm)")
-plt.ylabel("Frequency")
-plt.show()
+app.get('/users/:id', (req, res) => {
+  const userId = req.params.id;
+  res.send(`User ID received: ${userId}`);
+});
 
-plt.figure(figsize=(6,4))
-plt.boxplot([heights, weights], labels=['Height', 'Weight'])
-plt.title("Box Plot of Height and Weight")
-plt.show()
+app.get('/search', (req, res) => {
+  const query = req.query.q;
+  const page = req.query.page || 1;
+  res.send(`Search query: ${query}, Page: ${page}`);
+});
 
-plt.figure(figsize=(6,4))
-plt.bar(names, weights, color='orange')
-plt.title("Bar Chart of Weights")
-plt.xlabel("Instances")
-plt.ylabel("Weight (kg)")
-plt.show()
+app.post('/users', (req, res) => {
+  const name = req.body.name;
+  res.status(201).send(`User '${name}' created successfully!`);
+});
 
-plt.figure(figsize=(6,6))
-plt.pie(weights, labels=names, autopct='%1.1f%%', startangle=90, colors=['red','green','blue','yellow'])
-plt.title("Pie Chart of Weights")
-plt.show()
+app.get('/info', (req, res) => {
+  const fullUrl = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
+  res.send(`Full URL of this request: ${fullUrl}`);
+});
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
