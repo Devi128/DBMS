@@ -1,39 +1,37 @@
-def selective_repeat_sender(frames, window_size):
-    n = len(frames)
-    acked = [False] * n
-    base = 0
+import matplotlib.pyplot as plt
+import numpy as np
 
-    while not all(acked):
-        print("\nCurrent window:", end=' ')
-        for i in range(base, min(base + window_size, n)):
-            if not acked[i]:
-                print(f"[{i}:{frames[i]}]", end=' ')
-        print()
-        
-        # Transmit un-ACKed frames in the window
-        for i in range(base, min(base + window_size, n)):
-            if not acked[i]:
-                print(f"Sent frame {i}: {frames[i]}")
+data = np.array([
+    [160, 55],
+    [170, 65],
+    [165, 60],
+    [180, 75]
+])
 
-        # User marks which frames in window were correctly ACKed
-        user_input = input("Enter ACKed frame numbers (comma separated), leave blank if none: ")
-        if user_input.strip().lower() == "done":
-            print("Terminated by user.")
-            break
-        if user_input.strip():
-            ack_numbers = [int(x) for x in user_input.split(',') if x.strip().isdigit()]
-            for ack_no in ack_numbers:
-                if 0 <= ack_no < n:
-                    acked[ack_no] = True
+heights = data[:, 0]
+weights = data[:, 1]
+names = ['A', 'B', 'C', 'D']
 
-        # Slide window forward to next unacked
-        while base < n and acked[base]:
-            base += 1
+plt.figure(figsize=(6,4))
+plt.hist(heights, bins=4, color='skyblue', edgecolor='black')
+plt.title("Histogram of Heights")
+plt.xlabel("Height (cm)")
+plt.ylabel("Frequency")
+plt.show()
 
-    print("\nAll frames sent and acknowledged (Selective Repeat ARQ simulation complete).")
+plt.figure(figsize=(6,4))
+plt.boxplot([heights, weights], labels=['Height', 'Weight'])
+plt.title("Box Plot of Height and Weight")
+plt.show()
 
-# Example test frames and window
-frames = ['A', 'B', 'C', 'D', 'E', 'F']
-window_size = 3
+plt.figure(figsize=(6,4))
+plt.bar(names, weights, color='orange')
+plt.title("Bar Chart of Weights")
+plt.xlabel("Instances")
+plt.ylabel("Weight (kg)")
+plt.show()
 
-selective_repeat_sender(frames, window_size)
+plt.figure(figsize=(6,6))
+plt.pie(weights, labels=names, autopct='%1.1f%%', startangle=90, colors=['red','green','blue','yellow'])
+plt.title("Pie Chart of Weights")
+plt.show()
