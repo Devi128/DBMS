@@ -1,21 +1,33 @@
-import numpy as np
+const { MongoClient } = require("mongodb");
 
-data = np.array([
-    [160, 55],
-    [170, 65],
-    [165, 60],
-    [180, 75]
-])
+const uri = "mongodb://localhost:27017";
+const client = new MongoClient(uri);
 
-def euclidean_distance(a, b):
-    return np.sqrt(np.sum((a - b) ** 2))
+async function run() {
+  try {
+    await client.connect();
+    console.log("Connected to local MongoDB");
 
-num_instances = data.shape[0]
-dissimilarity_matrix = np.zeros((num_instances, num_instances))
+    const db = client.db("schoolDB");
+    const students = db.collection("students");
 
-for i in range(num_instances):
-    for j in range(num_instances):
-        dissimilarity_matrix[i][j] = euclidean_distance(data[i], data[j])
+    await db.createCollection("teachers");
+    console.log("'teachers' collection created in 'schoolDB'");
 
-print("Dissimilarity Matrix (Euclidean Distance):")
-print(dissimilarity_matrix)
+    await students.insertOne({ name: "Alice", grade: "A" });
+    console.log("Inserted a document into 'students' collection");
+
+    await db.collection("teachers").drop();
+    console.log("'teachers' collection dropped");
+
+    await db.dropDatabase();
+    console.log("'schoolDB' database dropped");
+  } catch (error) {
+    console.error("Error:", error);
+  } finally {
+    await client.close();
+    console.log("Connection closed");
+  }
+}
+
+run();
