@@ -52,3 +52,13 @@ function Contact() {
 }
 
 export default Contact;
+
+
+
+
+
+1.npx create-react-app myrouterapp
+2.cd myrouterapp
+3.npm install react-router-dom
+4.code .
+5.npm start
