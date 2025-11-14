@@ -32,3 +32,13 @@ app.get('/info', (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
+
+
+
+
+
+1.folder create express
+2.npm init -y
+3.npm install express
+4.create file server.js
+5.node server.js
