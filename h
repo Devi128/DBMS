@@ -31,3 +31,14 @@ async function run() {
 }
 
 run();
+
+
+
+
+
+
+node -v
+npm -v
+npm init -y
+npm install mongodb
+node filename.js
